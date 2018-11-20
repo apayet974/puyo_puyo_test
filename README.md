@@ -1,6 +1,6 @@
-#Puyo Puyo Test by Arnaud Payet
+# Puyo Puyo Test by Arnaud Payet
 
-##Installation
+## Installation
 After downloading or cloning the project sources, you have to run
 ```
 npm install
@@ -8,16 +8,16 @@ npm install
 
 Node version > 8 & Npm version > 5 are expected
 
-##Launch
+## Launch
 To launch the application locally on port 3000, you have to run 
 ```
 npm start
 ```
 
-##Play
+## Play
 Go to `http://localhost:3000` and enjoy :)
 
-##Commands
+## Commands
 Note that Arrow Keys don't work in Chrome as commands
 
 `LEFT ARROW`,`RIGHT ARROW` or `Q`,`D` to move puyo horizontally
