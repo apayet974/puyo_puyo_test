@@ -43,12 +43,10 @@ class App extends Component {
             </Grid.Column>
             <Grid.Column width={8}>
               <GameBoard />
-
             </Grid.Column>
             <Grid.Column>
               <NextPairView/>
               <GameInfo/>
-
             </Grid.Column>
         </Grid>
       </div>

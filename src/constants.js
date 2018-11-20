@@ -6,6 +6,7 @@ export const GRID_MIN_HEIGHT = 0;
 export const ROW_NUMBERS = 12;
 export const COLUMN_NUMBERS = 6;
 export const MIN_CHAIN_LENGTH=4;
+export const DEFAULT_PUYO_PAIR_COLUMN_INDEX=2;
 
 //GAME BOARD STYLE
 export const GAME_BOARD_HEIGHT = '600px';
@@ -38,9 +39,13 @@ export const GAME_PHASES = [PHASE_PLAYING, PHASE_DROPPING, PHASE_COMPUTING, PHAS
 
 //COMMANDS
 export const CMD_MOVE_RIGHT = 'ArrowRight';
+export const CMD_MOVE_RIGHT_ALT = 'KeyD';
 export const CMD_MOVE_LEFT = 'ArrowLeft';
+export const CMD_MOVE_LEFT_ALT = 'KeyA';
 export const CMD_ROTATION_UP = 'ArrowUp';
+export const CMD_ROTATION_UP_ALT = 'KeyW';
 export const CMD_ROTATION_BACK = 'ArrowDown';
+export const CMD_ROTATION_BACK_ALT = 'KeyS';
 export const CMD_INSTANT_DROP = 'Space';
 
 //PUYO POSITIONS
@@ -59,7 +64,8 @@ export const GRID_CELL_SIZE = '50';
 //VELOCITY
 // the velocity is expressed in ms to go from pixel to pixel
 export const DROP_VELOCITY='1';
-export const DEFAULT_VELOCITY= '500';
+export const DEFAULT_VELOCITY= '100';
 export const PIXEL_BY_INTERVAL = '1';
+export const MAX_VELOCITY = '5';
 
 export const LEVEL_CHANGE_PERIOD = '60000';

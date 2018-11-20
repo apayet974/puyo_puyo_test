@@ -7,7 +7,7 @@ export default class PuyoPair extends Component {
         const { x, y, puyoAColor, puyoBColor, position } = this.props;
         // The position reflects the relative postion of B regarding to A
         const getCoordinatesFromPosition = (postion) => {
-            const cellSize = parseInt(GRID_CELL_SIZE,10);
+            const cellSize = parseInt(GRID_CELL_SIZE, 10);
             const simpleSize = cellSize;
             const doubleSize = cellSize * 2;
             const firstCenter = cellSize / 2;

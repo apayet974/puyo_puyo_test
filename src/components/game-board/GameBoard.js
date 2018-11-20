@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import './GameBoard.css'
 import Puyo from '../puyo/Puyo';
-import { GRID_CELL_SIZE, EMPTY_CELL, PHASE_PLAYING, CMD_MOVE_LEFT, CMD_MOVE_RIGHT, GRID_MAX_WIDTH, GRID_MIN_WIDTH, CMD_INSTANT_DROP, PHASE_DROPPING, DROP_VELOCITY, CMD_ROTATION_UP, ROTATION_UP, CMD_ROTATION_BACK, ROTATION_BACK, POSITION_TOP, POSITION_BOTTOM, PHASE_COMPUTING, PHASE_GAME_OVER, GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, GAME_BOARD_GAME_OVER_BG, GAME_BOARD_PLAY_BG, DEFAULT_VELOCITY, PIXEL_BY_INTERVAL, COLUMN_NUMBERS, GRID_MAX_HEIGHT } from '../../constants';
+import { GRID_CELL_SIZE, EMPTY_CELL, PHASE_PLAYING, CMD_MOVE_LEFT, CMD_MOVE_RIGHT, GRID_MAX_WIDTH, GRID_MIN_WIDTH, CMD_INSTANT_DROP, PHASE_DROPPING, DROP_VELOCITY, CMD_ROTATION_UP, ROTATION_UP, CMD_ROTATION_BACK, ROTATION_BACK, POSITION_TOP, POSITION_BOTTOM, PHASE_COMPUTING, PHASE_GAME_OVER, GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT, GAME_BOARD_GAME_OVER_BG, GAME_BOARD_PLAY_BG, DEFAULT_VELOCITY, PIXEL_BY_INTERVAL, COLUMN_NUMBERS, GRID_MAX_HEIGHT, CMD_MOVE_LEFT_ALT, CMD_MOVE_RIGHT_ALT, CMD_ROTATION_UP_ALT, CMD_ROTATION_BACK_ALT, MAX_VELOCITY, DEFAULT_PUYO_PAIR_COLUMN_INDEX } from '../../constants';
 import { connect } from 'react-redux';
 import PuyoPair from '../puyo-pair/PuyoPair';
-import { timer } from 'rxjs';
-import { incrementLevelAction } from '../../actions/incrementLevel';
 import { changePhaseAction } from '../../actions/changePhase';
 import { addPuyoPairToGridAction } from '../../actions/addPuyoPairToGrid';
 import { generateNextPuyoPairAction } from '../../actions/generateNextPuyoPair';
@@ -33,7 +31,7 @@ class GameBoard extends Component {
         super(props);
         this.state = {
             // the index is based on the A puyo of the pair
-            currentPuyoPairColumnIndex: 2,
+            currentPuyoPairColumnIndex: DEFAULT_PUYO_PAIR_COLUMN_INDEX,
             currentPuyoPairY: 0
         };
         this.updateCurrentPuyoPairY = this.updateCurrentPuyoPairY.bind(this);
@@ -48,19 +46,24 @@ class GameBoard extends Component {
         document.addEventListener('keypress', (event) => {
             const { gamePhase, rotatePuyoPair } = this.props;
             if (gamePhase === PHASE_PLAYING) {
+                console.log(event);
                 switch (event.code) {
                     case CMD_MOVE_LEFT:
+                    case CMD_MOVE_LEFT_ALT:
                         this.updateCurrentPuyoColumn(-1);
                         break;
                     case CMD_MOVE_RIGHT:
+                    case CMD_MOVE_RIGHT_ALT:
                         this.updateCurrentPuyoColumn(1);
                         break;
                     case CMD_INSTANT_DROP:
                         this.triggerDrop();
                         break;
+                    case CMD_ROTATION_UP_ALT:
                     case CMD_ROTATION_UP:
                         rotatePuyoPair(ROTATION_UP);
                         break;
+                    case CMD_ROTATION_BACK_ALT:
                     case CMD_ROTATION_BACK:
                         rotatePuyoPair(ROTATION_BACK);
                         break;
@@ -96,7 +99,7 @@ class GameBoard extends Component {
         const { level, gamePhase } = this.props;
         switch (gamePhase) {
 
-            case PHASE_PLAYING: return 10//DEFAULT_VELOCITY - (DEFAULT_VELOCITY/(2*level));
+            case PHASE_PLAYING: return Math.max(DEFAULT_VELOCITY - (DEFAULT_VELOCITY / (5 * level), MAX_VELOCITY));
             case PHASE_DROPPING: return parseInt(DROP_VELOCITY, 10);
             default: return 0;
         }
@@ -113,20 +116,20 @@ class GameBoard extends Component {
     }
 
     resetCurrentPuyoPair() {
-        this.setState({ currentPuyoPairY: 0, currentPuyoPairColumnIndex: Math.floor(Math.random()* (COLUMN_NUMBERS-1)) });
+        this.setState({ currentPuyoPairY: 0, currentPuyoPairColumnIndex: Math.floor(Math.random() * (COLUMN_NUMBERS - 1)) });
 
     }
 
     updateCurrentPuyoPairY() {
-        const {currentPuyoPairY, currentPuyoPairColumnIndex} = this.state;
-        const {gameGrid,currentPuyoPair} = this.props;
+        const { currentPuyoPairY, currentPuyoPairColumnIndex } = this.state;
+        const { gameGrid, currentPuyoPair } = this.props;
 
-        const newCurrentPuyoPairY = currentPuyoPairY + parseInt(PIXEL_BY_INTERVAL,10);
-        const puyoPairIndexes = Utils.getGameGridIndexesFromPuyoPair(currentPuyoPairY,currentPuyoPairColumnIndex,currentPuyoPair.position);
+        const newCurrentPuyoPairY = currentPuyoPairY + parseInt(PIXEL_BY_INTERVAL, 10);
+        const puyoPairIndexes = Utils.getGameGridIndexesFromPuyoPair(currentPuyoPairY, currentPuyoPairColumnIndex, currentPuyoPair.position);
         const isColliding = puyoPairIndexes.reduce((prev, puyoPairIndex) => {
-            return prev 
-            || puyoPairIndex.rowIndex > GRID_MAX_HEIGHT
-            || gameGrid[puyoPairIndex.rowIndex][puyoPairIndex.colIndex] !== EMPTY_CELL;
+            return prev
+                || puyoPairIndex.rowIndex > GRID_MAX_HEIGHT
+                || gameGrid[puyoPairIndex.rowIndex][puyoPairIndex.colIndex] !== EMPTY_CELL;
         }, false);
 
         if (isColliding) {
